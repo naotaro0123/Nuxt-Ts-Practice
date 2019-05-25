@@ -1,12 +1,7 @@
-<template>
-  <div class="card">
-    <h2></h2>
-    <img
-      :src="
-        'https://robohash.org/' + person.first_name + '_' + person.last_name
-      "
-    />
-  </div>
+<template lang="pug">
+  div.card
+    h2
+    img(:src="'https://robohash.org/' + person.first_name + '_' + person.last_name")
 </template>
 
 <script lang="ts">

@@ -1,4 +1,4 @@
-# book-search-app
+# Nuxt-Ts-Practice
 
 > Nuxt.js TypeScript project
 
