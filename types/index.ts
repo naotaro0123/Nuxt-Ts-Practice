@@ -1,27 +1,21 @@
-/* eslint-disable camelcase */
-/* eslint-disable no-use-before-define */
 export * from './state';
 
-export interface Person {
+export interface Books {
   id: number;
-  first_name: string;
-  last_name: string;
-  contact: Contact;
-  gender: string;
-  ip_address: string;
-  avatar: string;
-  address: Address;
+  book: Book[];
 }
 
-export interface Contact {
-  email: string;
-  phone: string;
+export interface Book {
+  id?: number;
+  volumeInfo?: VolumeInfo;
 }
 
-export interface Address {
-  city: string;
-  country: string;
-  postalCode: string;
-  state: string;
-  street: string;
+interface VolumeInfo {
+  title: string;
+  description?: string;
+  imageLinks?: ImageLinks;
+}
+
+interface ImageLinks {
+  smallThumbnail: boolean;
 }

@@ -1,28 +1,55 @@
-// eslint-disable-next-line no-unused-vars
-import { RootState, Person } from '~/types';
+import axios from 'axios';
 // eslint-disable-next-line no-unused-vars
 import { MutationTree, ActionTree } from 'vuex';
-import localRandomData from '~/static/random-data.json';
+// eslint-disable-next-line no-unused-vars
+import { RootState } from '~/types';
 
 export const state = (): RootState => ({
-  people: []
+  books: [],
+  book: {},
+  query: ''
 });
 
 export const mutations: MutationTree<RootState> = {
-  setPeople(state: RootState, people: Person[]): void {
-    state.people = people;
+  setBooks(state, books) {
+    state.books = books;
+  },
+  setBook(state, book) {
+    state.book = book;
+  },
+  clearBook(state) {
+    state.book = {};
+  },
+  setQuery(state, query) {
+    state.query = query;
   }
 };
 
 export const actions: ActionTree<RootState, RootState> = {
-  async nuxtServerInit({ commit }, context) {
-    let people: Person[] = [];
+  async search({ commit, state }) {
+    if (!state.query) {
+      return;
+    }
+    const path = `https://www.googleapis.com/books/v1/volumes?q=${state.query}`;
+    const response = await axios.get(path);
+    if (response.data && response.data.items) {
+      const books = response.data.items;
+      commit('setBooks', books.slice(0, 10));
+    }
+  },
 
-    // If you serve the site statically with `nuxt generate`, you can't use HTTP requests for local
-    people = context.isStatic
-      ? localRandomData
-      : await context.app.$axios.$get('./random-data.json');
+  async fetchBook({ commit, state }, id) {
+    commit('clearBook');
+    const book = state.books.find(book => book.id === id);
+    if (book !== void 0) {
+      commit('setBook', book);
+      return null;
+    }
 
-    commit('setPeople', people.slice(0, 10));
+    const path = `https://www.googleapis.com/books/v1/volumes/${id}`;
+    const response = await axios.get(path);
+    if (response && response.data) {
+      commit('setBook', response.data);
+    }
   }
 };

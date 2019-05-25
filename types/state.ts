@@ -1,6 +1,8 @@
 // eslint-disable-next-line no-unused-vars
-import { Person } from '~/types';
+import { Books, Book } from '~/types';
 
 export interface RootState {
-  people: Person[];
+  books: Books[];
+  book: Book;
+  query: string;
 }
